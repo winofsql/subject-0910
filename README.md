@@ -38,3 +38,5 @@
 ## vscode の builtin の 構文候補( アイコンが四角いのを選ぶ )
 ![image](https://user-images.githubusercontent.com/1501327/132785552-dc4ed76f-ec5d-401f-90ec-ccd0ef4c5124.png)
 
+## MySQL 拡張の 実行処理を F5 に変更
+![image](https://user-images.githubusercontent.com/1501327/132788074-7e9a2be3-a728-4159-af71-6261bbca17b8.png)
