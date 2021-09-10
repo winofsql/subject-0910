@@ -23,3 +23,6 @@
         "php": "C:\\xampp\\php\\php.exe"
     }
 ```
+
+## Code Runner の 実行をターミナルで行う
+![image](https://user-images.githubusercontent.com/1501327/132783871-ac8fe518-e0ac-4a89-80d7-05d878875b8d.png)
