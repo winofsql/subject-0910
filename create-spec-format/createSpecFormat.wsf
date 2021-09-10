@@ -1,0 +1,681 @@
+<JOB>
+<COMMENT>
+************************************************************
+ WSH 実行スケルトン
+************************************************************
+</COMMENT>
+
+<COMMENT>
+************************************************************
+ 外部スクリプト定義
+************************************************************
+</COMMENT>
+<SCRIPT
+	language="VBScript"
+	src="http://lightbox.in.coocan.jp/laylaClass.vbs">
+</SCRIPT>
+
+<SCRIPT language=VBScript>
+' ***********************************************************
+' 処理開始
+' ***********************************************************
+Call laylaFunctionTarget( "http://lightbox.in.coocan.jp/" )
+Call laylaLoadFunction( "baseFunction.vbs" )
+Call laylaLoadFunction( "excelFunction.vbs" )
+
+Crun
+
+str = InputBox( MyDocDir & " に作成されるExcelブック名を指定します",, _
+	"簡易詳細設計書フォーマット" )
+if str = "" then
+	Wscript.Quit
+end if
+
+strTarget = MyDocDir & "\" & str & ".xlsx"
+
+Set MyBook = CreateBook( strTarget )
+' Call ExcelVisible( True )
+
+' ******************************************************
+' 画面設計書フォーマット作成
+' ******************************************************
+strSheetName = "画面設計書"
+Wscript.Echo strSheetName & " を作成しています"
+
+Call AddSheetTop(MyBook, strSheetName)
+Call ExcelSelectSheet(MyBook, strSheetName)
+on error resume next
+Call DeleteSheet( MyBook, "Sheet1" )
+Call DeleteSheet( MyBook, "Sheet2" )
+Call DeleteSheet( MyBook, "Sheet3" )
+on error goto 0
+
+Call Format_Page(MyBook)
+
+Call ExcelSize_Disp(MyBook, strSheetName)
+Call ExcelLine_Disp(MyBook, strSheetName)
+Call ExcelSetText_Disp(MyBook, strSheetName)
+
+' ******************************************************
+' 概要書
+' ******************************************************
+strSheetName = "概要書"
+Wscript.Echo strSheetName & " を作成しています"
+
+Call AddSheetTop(MyBook, strSheetName)
+Call ExcelSelectSheet(MyBook, strSheetName)
+Call Format_Page(MyBook)
+Call ExcelSize_Plan(MyBook, strSheetName)
+Call ExcelLine_Plan(MyBook, strSheetName)
+Call ExcelSetText_Plan(MyBook, strSheetName)
+
+' ******************************************************
+' 入力設計書
+' ******************************************************
+strSheetName = "入力設計書"
+Wscript.Echo strSheetName & " を作成しています"
+
+Call AddSheetLast(MyBook, strSheetName)
+Call ExcelSelectSheet(MyBook, strSheetName)
+Call Format_Page(MyBook)
+Call ExcelSize_Plan(MyBook, strSheetName)
+Call ExcelLine_Plan(MyBook, strSheetName)
+Call ExcelSetText_Plan(MyBook, strSheetName)
+
+' ******************************************************
+' 出力設計書
+' ******************************************************
+strSheetName = "出力設計書"
+Wscript.Echo strSheetName & " を作成しています"
+
+Call AddSheetLast(MyBook, strSheetName)
+Call ExcelSelectSheet(MyBook, strSheetName)
+Call Format_Page(MyBook)
+Call ExcelSize_Plan(MyBook, strSheetName)
+Call ExcelLine_Plan(MyBook, strSheetName)
+Call ExcelSetText_Plan(MyBook, strSheetName)
+
+
+' ******************************************************
+' 終了処理
+' ******************************************************
+Call ExcelSave( MyBook )
+Call ExcelQuit( MyBook )
+Call ExcelLoad( Dd(strTarget) )
+
+' ******************************************************
+' セルサイズの設定
+' ******************************************************
+Function ExcelSize_Disp(MyBook, Target)
+
+	'セルの高さ合わせ
+	Call ExcelSetRowHeight(MyBook, Target, 1, 13.50)
+	Call ExcelSetRowHeight(MyBook, Target, 2, 24.50)
+	Call ExcelSetRowHeight(MyBook, Target, 3, 13.50)
+	Call ExcelSetRowHeight(MyBook, Target, 4, 24.50)
+
+	For i = 5 To 25
+		Call ExcelSetRowHeight(MyBook, Target, i, 24.75)
+	Next
+
+	For i = 26 To 38
+		Call ExcelSetRowHeight(MyBook, Target, i, 19.00)
+	Next
+
+	'セルの幅合わせ
+	Call ExcelSetColumnWidth(MyBook, Target, 1, 3.50)
+	Call ExcelSetColumnWidth(MyBook, Target, 2, 22.38)
+	Call ExcelSetColumnWidth(MyBook, Target, 3, 7.50)
+	Call ExcelSetColumnWidth(MyBook, Target, 4, 6.00)
+	Call ExcelSetColumnWidth(MyBook, Target, 5, 6.00)
+	Call ExcelSetColumnWidth(MyBook, Target, 6, 11.50)
+	Call ExcelSetColumnWidth(MyBook, Target, 7, 25.00)
+	Call ExcelSetColumnWidth(MyBook, Target, 8, 12.00)
+
+End Function
+
+' ******************************************************
+' 罫線の設定
+' ******************************************************
+Function ExcelLine_Disp(MyBook, Target)
+
+	' BOX罫線
+	Call ExcelRange(MyBook, Target, 1, 1, 8, 38 )
+	Call ExcelBox(xlContinuous, xlMedium)
+
+	' 上罫線
+	Call ExcelRange(MyBook, Target, 1, 2, 8, 2 )
+	Call ExcelLine(xlDot, xlThin)
+
+	Call ExcelRange(MyBook, Target, 1, 3, 8, 3 )
+	Call ExcelLine(xlContinuous, xlThin)
+
+	Call ExcelRange(MyBook, Target, 1, 4, 8, 4 )
+	Call ExcelLine(xlDot, xlThin)
+
+	Call ExcelRange(MyBook, Target, 1, 5, 8, 5 )
+	Call ExcelLine(xlContinuous, xlMedium)
+
+	Call ExcelRange(MyBook, Target, 1, 26, 8, 26 )
+	Call ExcelLine(xlContinuous, xlMedium)
+
+	for i = 27 to 38
+		Call ExcelRange(MyBook, Target, 1, i, 8, i )
+		Call ExcelLine(xlDot, xlThin)
+	Next
+
+	' 右罫線
+	Call ExcelRange(MyBook, Target, 2, 1, 2, 4 )
+	Call ExcelLineRight(xlContinuous, xlThin)
+
+	Call ExcelRange(MyBook, Target, 6, 1, 6, 4 )
+	Call ExcelLineRight(xlContinuous, xlThin)
+
+	Call ExcelRange(MyBook, Target, 7, 1, 7, 4 )
+	Call ExcelLineRight(xlContinuous, xlThin)
+
+End Function
+
+' ******************************************************
+' セルのテキストの設定
+' ******************************************************
+Function ExcelSetText_Disp(MyBook, Target)
+
+	Call ExcelRange(MyBook, Target, 1, 1, 7, 49 )
+	Call ExcelVAlign()
+
+	' １行目
+	Call ExcelSetCell(MyBook, Target, 1, 1, "　システム名")
+	Call ExcelSetCell(MyBook, Target, 3, 1, "　サブシステム名")
+	Call ExcelSetCell(MyBook, Target, 7, 1, "　プログラムID")
+	Call ExcelSetCell(MyBook, Target, 8, 1, "ページ")
+	Call ExcelRange(MyBook, Target, 8, 1, 8, 1 )
+	Call ExcelHAlign()
+
+	' ２行目
+	Call ExcelSetCell(MyBook, Target, 8, 2, "／")
+	Call ExcelRange(MyBook, Target, 8, 2, 8, 2 )
+	Call ExcelHAlign()
+
+	' ３行目
+	Call ExcelSetCell(MyBook, Target, 1, 3, "　画面ID")
+	Call ExcelSetCell(MyBook, Target, 3, 3, "　画面名")
+
+	Call ExcelSetCell(MyBook, Target, 7, 3, "作成日")
+	Call ExcelRange(MyBook, Target, 7, 3, 7, 3 )
+	Call ExcelHAlign()
+
+	Call ExcelSetCell(MyBook, Target, 8, 3, "作成者")
+	Call ExcelRange(MyBook, Target, 8, 3, 8, 3 )
+	Call ExcelHAlign()
+
+	' ４行目
+	Call ExcelRange(MyBook, Target, 7, 4, 7, 4 )
+	Call ExcelHAlign()
+
+	Call ExcelRange(MyBook, Target, 8, 4, 8, 4 )
+	Call ExcelHAlign()
+
+End Function
+
+' ******************************************************
+' セルサイズの設定
+' ******************************************************
+Function ExcelSize_Plan(MyBook, Target)
+
+	if Target = "概要書" then
+
+		'セルの高さ合わせ
+		Call ExcelSetRowHeight(MyBook, Target, 1, 13.50)
+		Call ExcelSetRowHeight(MyBook, Target, 2, 24.50)
+		Call ExcelSetRowHeight(MyBook, Target, 3, 13.50)
+		Call ExcelSetRowHeight(MyBook, Target, 4, 24.50)
+		Call ExcelSetRowHeight(MyBook, Target, 5, 24.50)
+		Call ExcelSetRowHeight(MyBook, Target, 34, 20.25)
+
+		For i = 6 To 49
+			if 6 <= i AND i <= 33then
+				Call ExcelSetRowHeight(MyBook, Target, i, 13.50)
+			elseif 35 <=  i AND i  <= 44 then
+				Call ExcelSetRowHeight(MyBook, Target, i, 24.50)
+			elseif 45 <=  i AND i  <= 49 then
+				Call ExcelSetRowHeight(MyBook, Target, i, 18.50)
+			end if
+		Next
+
+		'セルの幅合わせ
+		Call ExcelSetColumnWidth(MyBook, Target, 1, 3.50)
+		Call ExcelSetColumnWidth(MyBook, Target, 2, 22.38)
+		Call ExcelSetColumnWidth(MyBook, Target, 3, 12.38)
+		Call ExcelSetColumnWidth(MyBook, Target, 4, 8.25)
+		Call ExcelSetColumnWidth(MyBook, Target, 5, 11.50)
+		Call ExcelSetColumnWidth(MyBook, Target, 6, 25.00)
+		Call ExcelSetColumnWidth(MyBook, Target, 7, 12.00)
+
+	elseif Target = "入力設計書" then
+
+		'セルの高さ合わせ
+		Call ExcelSetRowHeight(MyBook, Target, 1, 13.50)
+		Call ExcelSetRowHeight(MyBook, Target, 2, 24.50)
+		Call ExcelSetRowHeight(MyBook, Target, 3, 13.50)
+		Call ExcelSetRowHeight(MyBook, Target, 4, 24.50)
+		Call ExcelSetRowHeight(MyBook, Target, 5, 20.25)
+
+		For i = 6 To 38
+			if 6 <= i AND i <= 25then
+				Call ExcelSetRowHeight(MyBook, Target, i, 24.75)
+			elseif 26 <=  i AND i  <= 38 then
+				Call ExcelSetRowHeight(MyBook, Target, i, 19.00)
+			end if
+		Next
+
+		'セルの幅合わせ
+		Call ExcelSetColumnWidth(MyBook, Target, 1, 3.50)
+		Call ExcelSetColumnWidth(MyBook, Target, 2, 22.38)
+		Call ExcelSetColumnWidth(MyBook, Target, 3, 7.50)
+		Call ExcelSetColumnWidth(MyBook, Target, 4, 6.00)
+		Call ExcelSetColumnWidth(MyBook, Target, 5, 6.00)
+		Call ExcelSetColumnWidth(MyBook, Target, 6, 11.50)
+		Call ExcelSetColumnWidth(MyBook, Target, 7, 25.00)
+		Call ExcelSetColumnWidth(MyBook, Target, 8, 12.00)
+
+	elseif Target = "出力設計書" then
+
+		'セルの高さ合わせ
+		Call ExcelSetRowHeight(MyBook, Target, 1, 13.50)
+		Call ExcelSetRowHeight(MyBook, Target, 2, 24.50)
+		Call ExcelSetRowHeight(MyBook, Target, 3, 13.50)
+		Call ExcelSetRowHeight(MyBook, Target, 4, 24.50)
+		Call ExcelSetRowHeight(MyBook, Target, 5, 20.25)
+
+		For i = 6 To 38
+			if 6 <= i AND i <= 25then
+				Call ExcelSetRowHeight(MyBook, Target, i, 24.75)
+			elseif 26 <=  i AND i  <= 38 then
+				Call ExcelSetRowHeight(MyBook, Target, i, 19.00)
+			end if
+		Next
+
+		'セルの幅合わせ
+		Call ExcelSetColumnWidth(MyBook, Target, 1, 3.50)
+		Call ExcelSetColumnWidth(MyBook, Target, 2, 22.38)
+		Call ExcelSetColumnWidth(MyBook, Target, 3, 7.50)
+		Call ExcelSetColumnWidth(MyBook, Target, 4, 6.00)
+		Call ExcelSetColumnWidth(MyBook, Target, 5, 6.00)
+		Call ExcelSetColumnWidth(MyBook, Target, 6, 11.50)
+		Call ExcelSetColumnWidth(MyBook, Target, 7, 25.00)
+		Call ExcelSetColumnWidth(MyBook, Target, 8, 12.00)
+
+	end if
+
+End Function
+
+' ******************************************************
+' 罫線の設定
+' ******************************************************
+Function ExcelLine_Plan(MyBook, Target)
+
+	if Target = "概要書" then
+		' BOX罫線
+		Call ExcelRange(MyBook, Target, 1, 1, 7, 49 )
+		Call ExcelBox(xlContinuous, xlMedium)
+
+		' 上罫線
+		Call ExcelRange(MyBook, Target, 1, 2, 7, 2 )
+		Call ExcelLine(xlDot, xlThin)
+
+		Call ExcelRange(MyBook, Target, 1, 3, 7, 3 )
+		Call ExcelLine(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 1, 4, 7, 4 )
+		Call ExcelLine(xlDot, xlThin)
+
+		Call ExcelRange(MyBook, Target, 1, 5, 7, 5 )
+		Call ExcelLine(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 5, 6, 7, 6 )
+		Call ExcelLine(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 1, 34, 7, 34 )
+		Call ExcelLine(xlContinuous, xlMedium)
+
+		Call ExcelRange(MyBook, Target, 1, 35, 7, 35 )
+		Call ExcelLine(xlContinuous, xlMedium)
+
+		for i = 36 to 44
+			' 線種→点線, 太さ→標準
+			Call ExcelRange(MyBook, Target, 1, i, 7, i )
+			Call ExcelLine(xlDot, xlThin)
+		Next
+
+		Call ExcelRange(MyBook, Target, 1, 45, 7, 45 )
+		Call ExcelLine(xlContinuous, xlMedium)
+
+		for i = 46 to 49
+			' 線種→点線, 太さ→標準
+			Call ExcelRange(MyBook, Target, 1, i, 7, i )
+			Call ExcelLine(xlDot, xlThin)
+		Next
+
+		' 右罫線
+		Call ExcelRange(MyBook, Target, 1, 35, 1, 44 )
+		Call ExcelLineRight(xlDot, xlThin)
+
+		Call ExcelRange(MyBook, Target, 4, 3, 4, 33 )
+		Call ExcelLineRight(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 5, 1, 5, 4 )
+		Call ExcelLineRight(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 6, 1, 6, 4 )
+		Call ExcelLineRight(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 2, 34, 2, 44 )
+		Call ExcelLineRight(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 3, 34, 3, 44 )
+		Call ExcelLineRight(xlContinuous, xlThin)
+
+	elseif Target = "入力設計書" then
+
+		' BOX罫線
+		Call ExcelRange(MyBook, Target, 1, 1, 8, 38 )
+		Call ExcelBox(xlContinuous, xlMedium)
+
+		' 上罫線
+		Call ExcelRange(MyBook, Target, 1, 2, 8, 2 )
+		Call ExcelLine(xlDot, xlThin)
+
+		Call ExcelRange(MyBook, Target, 1, 3, 8, 3 )
+		Call ExcelLine(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 1, 4, 8, 4 )
+		Call ExcelLine(xlDot, xlThin)
+
+		Call ExcelRange(MyBook, Target, 1, 5, 8, 5 )
+		Call ExcelLine(xlContinuous, xlMedium)
+
+		Call ExcelRange(MyBook, Target, 1, 6, 8, 6 )
+		Call ExcelLine(xlContinuous, xlMedium)
+
+		for i = 7 to 25
+			Call ExcelRange(MyBook, Target, 1, i, 8, i )
+			Call ExcelLine(xlDot, xlThin)
+		Next
+
+		Call ExcelRange(MyBook, Target, 1, 26, 8, 26 )
+		Call ExcelLine(xlContinuous, xlMedium)
+
+		for i = 27 to 38
+			Call ExcelRange(MyBook, Target, 1, i, 8, i )
+			Call ExcelLine(xlDot, xlThin)
+		Next
+
+		' 右罫線
+		Call ExcelRange(MyBook, Target, 1, 6, 1, 25 )
+		Call ExcelLineRight(xlDot, xlThin)
+
+		Call ExcelRange(MyBook, Target, 2, 1, 2, 2 )
+		Call ExcelLineRight(1, 2)
+
+		Call ExcelRange(MyBook, Target, 2, 5, 2, 25 )
+		Call ExcelLineRight(1, 2)
+
+		Call ExcelRange(MyBook, Target, 3, 5, 3, 25 )
+		Call ExcelLineRight(1, 2)
+
+		Call ExcelRange(MyBook, Target, 4, 5, 4, 25 )
+		Call ExcelLineRight(1, 2)
+
+		Call ExcelRange(MyBook, Target, 5, 3, 5, 25 )
+		Call ExcelLineRight(1, 2)
+
+		Call ExcelRange(MyBook, Target, 6, 1, 6, 25 )
+		Call ExcelLineRight(1, 2)
+
+		Call ExcelRange(MyBook, Target, 7, 1, 7, 4 )
+		Call ExcelLineRight(1, 2)
+
+	elseif Target = "出力設計書" then
+
+		' BOX罫線
+		Call ExcelRange(MyBook, Target, 1, 1, 8, 38 )
+		Call ExcelBox(xlContinuous, xlMedium)
+
+		' 上罫線
+		Call ExcelRange(MyBook, Target, 1, 2, 8, 2 )
+		Call ExcelLine(xlDot, xlThin)
+
+		Call ExcelRange(MyBook, Target, 1, 3, 8, 3 )
+		Call ExcelLine(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 1, 4, 8, 4 )
+		Call ExcelLine(xlDot, xlThin)
+
+		Call ExcelRange(MyBook, Target, 1, 5, 8, 5 )
+		Call ExcelLine(xlContinuous, xlMedium)
+
+		Call ExcelRange(MyBook, Target, 1, 6, 8, 6 )
+		Call ExcelLine(xlContinuous, xlMedium)
+
+		for i = 7 to 25
+			Call ExcelRange(MyBook, Target, 1, i, 8, i )
+			Call ExcelLine(xlDot, xlThin)
+		Next
+
+		Call ExcelRange(MyBook, Target, 1, 26, 8, 26 )
+		Call ExcelLine(xlContinuous, xlMedium)
+
+		for i = 27 to 38
+			Call ExcelRange(MyBook, Target, 1, i, 8, i )
+			Call ExcelLine(xlDot, xlThin)
+		Next
+
+		' 右罫線
+		Call ExcelRange(MyBook, Target, 1, 6, 1, 25 )
+		Call ExcelLineRight(xlDot, xlThin)
+
+		Call ExcelRange(MyBook, Target, 2, 1, 2, 2 )
+		Call ExcelLineRight(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 2, 5, 2, 25 )
+		Call ExcelLineRight(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 5, 3, 5, 4 )
+		Call ExcelLineRight(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 6, 1, 6, 4 )
+		Call ExcelLineRight(xlContinuous, xlThin)
+
+		Call ExcelRange(MyBook, Target, 7, 1, 7, 25 )
+		Call ExcelLineRight(xlContinuous, xlThin)
+	end if
+
+End Function
+
+' ******************************************************
+' セルのテキストの設定
+' ******************************************************
+Function ExcelSetText_Plan(MyBook, Target)
+
+	if Target = "概要書" then
+
+		Call ExcelRange(MyBook, Target, 1, 1, 7, 49 )
+		Call ExcelVAlign()
+
+		Call ExcelSetCell(MyBook, Target, 1, 1, "　システム名")
+		Call ExcelSetCell(MyBook, Target, 3, 1, "　サブシステム名")
+		Call ExcelSetCell(MyBook, Target, 6, 1, "　プログラムID")
+		Call ExcelSetCell(MyBook, Target, 1, 3, "　プログラム名")
+		Call ExcelSetCell(MyBook, Target, 1, 34, "　テーブル名")
+
+		Call ExcelSetCell(MyBook, Target, 7, 1, "ページ")
+		Call ExcelRange(MyBook, Target, 7, 1, 7, 1 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 7, 2, "／")
+		Call ExcelRange(MyBook, Target, 7, 2, 7, 2 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 5, 3, "種別")
+		Call ExcelRange(MyBook, Target, 5, 3, 5, 3 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 6, 3, "作成日")
+		Call ExcelRange(MyBook, Target, 6, 3, 6, 3 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 7, 3, "作成者")
+		Call ExcelRange(MyBook, Target, 7, 3, 7, 3 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 5, 5, "処理概要")
+		Call ExcelRange(MyBook, Target, 5, 5, 7, 5 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 3, 34, "入出力")
+		Call ExcelRange(MyBook, Target, 3, 34, 3, 34 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 4, 34, "備考")
+		Call ExcelRange(MyBook, Target, 4, 34, 7, 34 )
+		Call ExcelHAlign()
+
+		for i = 35 to 44
+			Call ExcelSetCell(MyBook, Target, 1, i, i - 34)
+			Call ExcelRange(MyBook, Target, 1, i, 1, i )
+
+			' 配置
+			Call ExcelHAlign()
+			' 書式設定
+			Call ExcelSetFont("太字", 12)
+		next
+
+	elseif Target = "入力設計書" then
+
+		Call ExcelRange(MyBook, Target, 1, 1, 8, 38 )
+		Call ExcelVAlign()
+
+		Call ExcelSetCell(MyBook, Target, 1, 1, "　システム名")
+
+		Call ExcelSetCell(MyBook, Target, 3, 1, "　サブシステム名")
+
+		Call ExcelSetCell(MyBook, Target, 7, 1, "　プログラムID")
+
+		Call ExcelSetCell(MyBook, Target, 8, 1, "ページ")
+		Call ExcelRange(MyBook, Target, 8, 1, 8, 1 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 8, 2, "／")
+		Call ExcelRange(MyBook, Target, 8, 2, 8, 2 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 1, 3, "　プログラム名")
+
+		Call ExcelSetCell(MyBook, Target, 6, 3, "種別")
+		Call ExcelRange(MyBook, Target, 6, 3, 6, 4 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 7, 3, "作成日")
+		Call ExcelRange(MyBook, Target, 7, 3, 7, 4 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 8, 3, "作成者")
+		Call ExcelRange(MyBook, Target, 8, 3, 8, 4 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 1, 5, "　項目名")
+
+		Call ExcelSetCell(MyBook, Target, 3, 5, "型式")
+		Call ExcelRange(MyBook, Target, 3, 5, 3, 5 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 4, 5, "桁数")
+		Call ExcelRange(MyBook, Target, 4, 5, 4, 5 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 5, 5, "I/O")
+		Call ExcelRange(MyBook, Target, 5, 5, 5, 5 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 6, 5, "種別")
+		Call ExcelRange(MyBook, Target, 6, 5, 6, 5 )
+		Call ExcelHAlign()
+
+		For i = 6 to 25
+			Call ExcelSetCell(MyBook, Target, 1, i, i - 5 )
+			Call ExcelRange(MyBook, Target, 1, i, 1, i )
+			Call ExcelHAlign()
+		Next
+
+	elseif Target = "出力設計書" then
+
+		Call ExcelRange(MyBook, Target, 1, 1, 8, 38 )
+		Call ExcelVAlign()
+
+		Call ExcelSetCell(MyBook, Target, 1, 1, "　システム名")
+
+		Call ExcelSetCell(MyBook, Target, 3, 1, "　サブシステム名")
+
+		Call ExcelSetCell(MyBook, Target, 7, 1, "　プログラムID")
+
+		Call ExcelSetCell(MyBook, Target, 8, 1, "ページ")
+		Call ExcelRange(MyBook, Target, 8, 1, 8, 1 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 8, 2, "／")
+		Call ExcelRange(MyBook, Target, 8, 2, 8, 2 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 1, 3, "　プログラム名")
+
+		Call ExcelSetCell(MyBook, Target, 6, 3, "種別")
+		Call ExcelRange(MyBook, Target, 6, 3, 6, 4 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 7, 3, "作成日")
+		Call ExcelRange(MyBook, Target, 7, 3, 7, 4 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 8, 3, "作成者")
+		Call ExcelRange(MyBook, Target, 8, 3, 8, 4 )
+		Call ExcelHAlign()
+
+		Call ExcelSetCell(MyBook, Target, 1, 5, "　列名")
+
+		Call ExcelSetCell(MyBook, Target, 3, 5, "　更新説明")
+
+		Call ExcelSetCell(MyBook, Target, 8, 5, "対象")
+		Call ExcelRange(MyBook, Target, 8, 5, 8, 5 )
+		Call ExcelHAlign()
+
+		For i = 6 to 25
+			Call ExcelSetCell(MyBook, Target, 1, i, i - 5 )
+			Call ExcelRange(MyBook, Target, 1, i, 1, i )
+			Call ExcelHAlign()
+		Next
+
+	end if
+
+End Function
+
+' ******************************************************
+' ヘッダー,余白の指定
+' ******************************************************
+Function Format_Page(MyBook)
+
+	on error resume next
+	With MyBook.ActiveSheet.PageSetup
+		.CenterHeader = "&18&A"
+		.LeftMargin = ExcelApp.InchesToPoints(0.393700787401575)
+		.RightMargin = ExcelApp.InchesToPoints(0.196850393700787)
+		.TopMargin = ExcelApp.InchesToPoints(0.551181102362205)
+		.BottomMargin = ExcelApp.InchesToPoints(0.393700787401575)
+		.HeaderMargin = ExcelApp.InchesToPoints(0.196850393700787)
+		.FooterMargin = ExcelApp.InchesToPoints(0.196850393700787)
+	End With
+	on error goto 0
+
+End Function
+</SCRIPT>
+</JOB>
