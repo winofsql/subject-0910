@@ -16,3 +16,10 @@
 ```javascript
     "php.validate.executablePath": "C:\\xampp\\php\\php.exe"
 ```
+
+## Code Runner の PHP 実効設定
+```
+    "code-runner.executorMap": {
+        "php": "C:\\xampp\\php\\php.exe"
+    }
+```
