@@ -6,3 +6,4 @@
 
 ## SQL 問題
 https://winofsql.jp/src/database/winofsql/?src=sql-test
+[MySQL 四捨五入](https://dev.mysql.com/doc/refman/5.6/ja/mathematical-functions.html#function_round)
