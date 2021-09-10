@@ -25,4 +25,4 @@
 ```
 
 ## Code Runner の 実行をターミナルで行う
-![image](https://user-images.githubusercontent.com/1501327/132783871-ac8fe518-e0ac-4a89-80d7-05d878875b8d.png)
+![image](https://user-images.githubusercontent.com/1501327/132783919-19568ae6-d5da-4de2-9363-8fa4348d52a0.png)
