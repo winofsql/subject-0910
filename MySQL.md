@@ -3,3 +3,6 @@
 
 ## MySQL の SHOW 構文
 [MySQL ドキュメント](https://dev.mysql.com/doc/refman/5.6/ja/show.html)
+
+## SQL 問題
+https://winofsql.jp/src/database/winofsql/?src=sql-test
