@@ -1,1 +1,7 @@
-
+{
+    "code-runner.executorMapByFileExtension": {
+        ".wsf": "cscript //Nologo"
+    },
+    "files.encoding": "shiftjis",
+    "code-runner.runInTerminal": true
+}
