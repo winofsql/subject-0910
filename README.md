@@ -10,3 +10,4 @@
 ![image](https://user-images.githubusercontent.com/1501327/132781854-0dedff30-2102-4c33-b719-ebd9dac44914.png)
 ![image](https://user-images.githubusercontent.com/1501327/132781953-2d392326-539e-46bc-be32-4593ebbc5d94.png)
 
+**※ 他のページも翻訳されてしまうので適宜設定して利用**
