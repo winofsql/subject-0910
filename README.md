@@ -36,5 +36,5 @@
 ```
 
 ## vscode の builtin の 構文候補( アイコンが四角いのを選ぶ )
-![image](https://user-images.githubusercontent.com/1501327/132785504-41092635-b962-4920-b326-5e24707ca5d9.png)
+![image](https://user-images.githubusercontent.com/1501327/132785552-dc4ed76f-ec5d-401f-90ec-ccd0ef4c5124.png)
 
