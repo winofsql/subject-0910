@@ -1,4 +1,4 @@
-build.bat を実行して下さい
+## build.bat を実行して下さい
 
 createSpecFormat.txt を
 createSpecFormat.wsf に変更する必要があります。
