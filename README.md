@@ -26,3 +26,11 @@
 
 ## Code Runner の 実行をターミナルで行う
 ![image](https://user-images.githubusercontent.com/1501327/132783919-19568ae6-d5da-4de2-9363-8fa4348d52a0.png)
+
+## Code Runner のワークスペース設定
+```javascript
+{
+    "code-runner.showRunIconInEditorTitleMenu": true,
+    "code-runner.runInTerminal": true
+}
+```
